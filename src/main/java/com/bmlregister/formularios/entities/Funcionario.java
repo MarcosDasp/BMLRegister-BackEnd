@@ -15,6 +15,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Data;
@@ -50,4 +52,7 @@ public class Funcionario {
     @JsonIgnore
     private List<Processo> processos;
 
+    @ManyToOne
+    @JoinColumn(name = "departamentoId", nullable = false)
+    private Departamento departamento;
 }
