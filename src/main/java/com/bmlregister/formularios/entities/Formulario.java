@@ -35,6 +35,7 @@ public class Formulario {
     private String cnpj;
     private String telefone;
     private int prazo;
+    private float valor;
 
     @Column(unique = true)
     private String token; // token único para gerar o link

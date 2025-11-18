@@ -51,4 +51,8 @@ public class Processo {
     private StatusProcesso statusProcesso = StatusProcesso.PENDENTE; // valor padrão
 
     private String observacoes; 
+
+    private float valor;
+
+    private int prazo;
 }

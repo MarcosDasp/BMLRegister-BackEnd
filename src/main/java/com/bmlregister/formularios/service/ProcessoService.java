@@ -32,6 +32,10 @@ public class ProcessoService {
             ProcessoAtualizada.setStatusProcesso(Processo.getStatusProcesso());  // Atualiza os campos necessários
             ProcessoAtualizada.setFormularioId(Processo.getFormularioId());
             ProcessoAtualizada.setFuncionarioId(Processo.getFuncionarioId());
+            ProcessoAtualizada.setValor(Processo.getValor());
+            ProcessoAtualizada.setObservacoes(Processo.getObservacoes());
+            ProcessoAtualizada.setData_validacao(Processo.getData_abertura());
+            ProcessoAtualizada.setPrazo(Processo.getPrazo());
             return ProcessoRepository.save(ProcessoAtualizada);  // Salva a Processo atualizada
         } else {
             // Caso a Processo não exista, retorna null

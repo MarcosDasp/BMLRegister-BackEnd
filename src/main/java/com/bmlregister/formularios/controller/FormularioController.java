@@ -83,7 +83,7 @@ public class FormularioController {
         f.setToken(token);
         formularioRepository.save(f);
 
-        String link = "http://127.0.0.1:5500/formularios/index.html?token=" + token;
+        String link = "https://MarcosDasp.github.io/BMLRegister-FrontEnd/formularios/index.html?token=" + token;
 
         return ResponseEntity.ok(Map.of(
                 "token", token,
@@ -121,6 +121,7 @@ public class FormularioController {
         f.setCnpj(dados.getCnpj());
         f.setTelefone(dados.getTelefone());
         f.setPrazo(dados.getPrazo());
+        f.setValor(dados.getValor());
         formularioRepository.save(f);
 
         // Cria um processo automaticamente
@@ -130,6 +131,8 @@ public class FormularioController {
         p.setData_abertura(LocalDate.now());
         p.setFuncionarioId(funcionario);
         p.setStatusProcesso(StatusProcesso.PENDENTE);
+        p.setValor(f.getValor());
+        p.setPrazo(dados.getPrazo());
         processoRepository.save(p);
 
         return ResponseEntity.ok("Formulário enviado e processo criado!");

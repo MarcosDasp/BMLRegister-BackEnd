@@ -29,6 +29,7 @@ public class FormularioService {
             FormularioAtualizada.setNomeEmpresa(Formulario.getNomeEmpresa());
             FormularioAtualizada.setPrazo(Formulario.getPrazo());
             FormularioAtualizada.setTelefone(Formulario.getTelefone());
+            FormularioAtualizada.setValor(Formulario.getValor());
             return FormularioRepository.save(FormularioAtualizada);  // Salva a Formulario atualizada
         } else {
             // Caso a Formulario não exista, retorna null
