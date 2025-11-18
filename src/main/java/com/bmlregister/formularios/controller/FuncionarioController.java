@@ -1,6 +1,7 @@
 package com.bmlregister.formularios.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bmlregister.formularios.entities.Funcionario;
+import com.bmlregister.formularios.entities.enums.NivelAcesso;
 import com.bmlregister.formularios.service.FuncionarioService;
 
 @RestController
@@ -39,16 +41,31 @@ public class FuncionarioController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @PostMapping
-    public ResponseEntity<Funcionario> incluir(@RequestBody 
-    Funcionario Funcionario) {
-        Funcionario novo = FuncionarioService.incluir(Funcionario);
-        if (novo != null) {
-            return new ResponseEntity<>(novo, HttpStatus.CREATED);
-        } else {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        @PostMapping
+        public ResponseEntity<Funcionario> incluir(@RequestBody Map<String, Object> body) {
+            try {
+                String nome = (String) body.get("nome");
+                String email = (String) body.get("email");
+                String senha = (String) body.get("senha");
+                String telefone = (String) body.get("telefone");
+                String nivelAcesso = (String) body.get("nivelAcesso");
+                Integer departamentoId = (Integer) body.get("departamentoId");
+
+                Funcionario f = new Funcionario();
+                f.setNome(nome);
+                f.setEmail(email);
+                f.setSenha(senha);
+                f.setTelefone(telefone);
+                f.setNivelAcesso(NivelAcesso.valueOf(nivelAcesso));
+
+                Funcionario novo = FuncionarioService.incluir(f, departamentoId);
+                return new ResponseEntity<>(novo, HttpStatus.CREATED);
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
         }
-    }
+
 
      @PutMapping("/{id}")
     public ResponseEntity<Funcionario> editar(@PathVariable int id, 

@@ -53,6 +53,7 @@ public class Funcionario {
     private List<Processo> processos;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "departamentoId", nullable = false)
     private Departamento departamento;
 }

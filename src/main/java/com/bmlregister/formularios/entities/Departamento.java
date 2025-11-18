@@ -2,12 +2,9 @@ package com.bmlregister.formularios.entities;
 
 import java.util.List;
 
-import com.bmlregister.formularios.entities.enums.Departamentos;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -28,10 +25,9 @@ public class Departamento {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idDepartamento;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private Departamentos departamentos;
-
+    private String departamento;
+    
     @OneToMany(mappedBy = "departamento")
+    @JsonIgnore
     private List<Funcionario> funcionarios;
 }

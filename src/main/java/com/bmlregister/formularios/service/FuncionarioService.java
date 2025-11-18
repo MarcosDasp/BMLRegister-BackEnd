@@ -6,7 +6,9 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.bmlregister.formularios.entities.Departamento;
 import com.bmlregister.formularios.entities.Funcionario;
+import com.bmlregister.formularios.repository.DepartamentoRepository;
 import com.bmlregister.formularios.repository.FuncionarioRepository;
 
 @Service
@@ -15,9 +17,19 @@ public class FuncionarioService {
     @Autowired
     private FuncionarioRepository FuncionarioRepository;
 
-    public Funcionario incluir(Funcionario Funcionario) {
+    @Autowired
+    private DepartamentoRepository departamentoRepository; 
+
+
+    public Funcionario incluir(Funcionario Funcionario, Integer departamentoId) {
+        Departamento departamento = departamentoRepository.findById(departamentoId)
+        .orElseThrow(() -> new RuntimeException("Departamento não encontrado"));
+
+        Funcionario.setDepartamento(departamento);
+
         return FuncionarioRepository.save(Funcionario);
     }
+
     public Funcionario editar(int id, Funcionario Funcionario) {
         // Verifique se a Funcionario existe
         Optional<Funcionario> FuncionarioExistente = FuncionarioRepository.findById(id);
@@ -29,6 +41,7 @@ public class FuncionarioService {
             FuncionarioAtualizada.setNome(Funcionario.getNome());
             FuncionarioAtualizada.setTelefone(Funcionario.getTelefone());
             FuncionarioAtualizada.setNivelAcesso(Funcionario.getNivelAcesso());
+            FuncionarioAtualizada.setDepartamento(Funcionario.getDepartamento());
             return FuncionarioRepository.save(FuncionarioAtualizada);  // Salva a Funcionario atualizada
         } else {
             // Caso a Funcionario não exista, retorna null
