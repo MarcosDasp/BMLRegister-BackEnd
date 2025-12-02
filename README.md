@@ -4,8 +4,6 @@
 
 ---
 
-## ⭐ **Badges**
-
 ![Status](https://img.shields.io/badge/Status-Em%20Desenvolvimento-blue)
 ![Java](https://img.shields.io/badge/Java-17-orange)
 ![SpringBoot](https://img.shields.io/badge/SpringBoot-3.x-brightgreen)
