@@ -67,8 +67,6 @@ public class FuncionarioController {
             // formata o telefone para o padrão brasileiro: (xx) xxxxx-xxxx
             telefone = "(" + telefone.substring(0, 2) + ") " + telefone.substring(2, 7) + "-" + telefone.substring(7);
 
-
-
             Funcionario f = new Funcionario();
             f.setNome(nome);
             f.setEmail(email);

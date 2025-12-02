@@ -12,10 +12,14 @@ import org.springframework.web.bind.annotation.*;
 import com.bmlregister.formularios.entities.Cliente;
 import com.bmlregister.formularios.entities.Formulario;
 import com.bmlregister.formularios.entities.Funcionario;
+import com.bmlregister.formularios.entities.Processo;
+import com.bmlregister.formularios.entities.enums.StatusProcesso;
 import com.bmlregister.formularios.repository.ClienteRepository;
 import com.bmlregister.formularios.repository.FormularioRepository;
 import com.bmlregister.formularios.repository.FuncionarioRepository;
+import com.bmlregister.formularios.repository.ProcessoRepository;
 import com.bmlregister.formularios.security.JwtUtil;
+import com.bmlregister.formularios.service.ClienteService;
 import com.bmlregister.formularios.service.FormularioService;
 
 @RestController
@@ -33,7 +37,13 @@ public class FormularioController {
     private ClienteRepository clienteRepository;
 
     @Autowired
+    private ClienteService clienteService;
+
+    @Autowired
     private FuncionarioRepository funcionarioRepository;
+
+    @Autowired
+    private ProcessoRepository processoRepository;
 
     // Obter um formulário usando o token
     @GetMapping("/{token}")
@@ -50,7 +60,14 @@ public class FormularioController {
 
     // Criar um formulário vazio e gerar token
     @PostMapping("/criar")
-    public ResponseEntity<?> criarFormulario(@RequestBody Map<String, Integer> body) {
+    public ResponseEntity<?> criarFormulario(@RequestBody Map<String, Integer> body, @RequestHeader("Authorization") String authHeader) {
+
+        String jwt = authHeader.replace("Bearer ", "");
+        String loginDoFuncionario = JwtUtil.getLoginDoToken(jwt);
+
+        // ele pega o valor do funcionario para criar um processo
+        Funcionario funcionario = funcionarioRepository.findByLogin(loginDoFuncionario)
+            .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 
         Integer clienteId = body.get("clienteId");
         if (clienteId == null) {
@@ -72,6 +89,20 @@ public class FormularioController {
         f.setToken(token);
         formularioRepository.save(f);
 
+        Processo p = new Processo();
+        p.setClienteId(f.getClienteId());
+        p.setStatusProcesso(StatusProcesso.ENVIADO);
+        p.setFormularioId(f);
+        p.getHistoricoFuncionarios().add(funcionario);
+        // salvar o funcionario, com a variavel tipo = CRIADOR
+
+        processoRepository.save(p);
+
+        // atualiza o cliente para conter o formulario relacionado
+        cliente.getFormularios().add(f);
+        clienteService.editar(cliente.getIdPessoa(), cliente);
+        
+
         String link = "https://MarcosDasp.github.io/BMLRegister-FrontEnd/formularios/index.html?token=" + token;
 
         return ResponseEntity.ok(Map.of(
@@ -84,14 +115,7 @@ public class FormularioController {
 
     // Receber o submit do formulário preenchido (JS envia aqui)
     @PostMapping("/{token}/submit")
-    public ResponseEntity<?> submit(@PathVariable String token, @RequestBody Formulario dados,  @RequestHeader("Authorization") String authHeader) {
-
-        String jwt = authHeader.replace("Bearer ", "");
-        String loginDoFuncionario = JwtUtil.getLoginDoToken(jwt);
-
-        // ele pega o valor do funcionario para criar um processo, mas tem que ver como faria isso num trigger
-        Funcionario funcionario = funcionarioRepository.findByLogin(loginDoFuncionario)
-            .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+    public ResponseEntity<?> submit(@PathVariable String token, @RequestBody Formulario dados) {
 
         Optional<Formulario> opt = formularioRepository.findByToken(token);
         if (opt.isEmpty()) {
@@ -141,7 +165,20 @@ public class FormularioController {
         f.setValor(dados.getValor());
         formularioRepository.save(f);
 
-        // Cria um processo automaticamente (vai virar um Trigger no SQL)
+        // Atualiza o processo com as informações do formulário
+        Processo processo = f.getProcesso();
+        if (processo == null) {
+            // se o processo for null dar erro
+            return ResponseEntity.badRequest().body("Erro: formulário não possui processo associado.");
+        }
+        processo.setPrazo(dados.getPrazo());
+        processo.setStatusProcesso(StatusProcesso.PENDENTE);
+        processoRepository.save(processo);
+
+        // atualiza o cliente para conter o processo
+        Cliente cliente = f.getClienteId();
+        cliente.getProcessos().add(processo);
+        clienteService.editar(cliente.getIdPessoa(), cliente);
 
         return ResponseEntity.ok("Formulário enviado e processo criado!");
     }

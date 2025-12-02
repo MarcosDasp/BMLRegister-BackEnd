@@ -31,13 +31,22 @@ public class Formulario {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idFormulario;
 
+    @Column(length = 50, nullable = false)
     private String nomeEmpresa;
+
+    @Column(length = 18, nullable = false)
     private String cnpj;
+
+    @Column(length = 15, nullable = false)
     private String telefone;
+
+    @Column(nullable = false)
     private int prazo;
+
+    @Column(nullable = false)
     private float valor; 
 
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String token; // token único para gerar o link
 
     @ManyToOne

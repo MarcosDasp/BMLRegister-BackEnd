@@ -1,6 +1,8 @@
 package com.bmlregister.formularios.entities;
 
 import com.bmlregister.formularios.entities.enums.StatusProcesso;
+
+import java.util.ArrayList;
 import java.util.List;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -12,8 +14,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.Data;
@@ -40,13 +42,13 @@ public class Processo {
     @Column(name = "status_processo", nullable = false)
     private StatusProcesso statusProcesso = StatusProcesso.PENDENTE; // valor padrão
 
+    @Column(length = 150)
     private String observacoes; 
 
     private int prazo;
     
-    @ManyToMany
-    @JoinColumn(name = "funcionarioId", nullable = false)
-    private List<Funcionario> funcionarioId;
+    @OneToMany(mappedBy = "processo")
+    private List<Funcionario> historicoFuncionarios =  new ArrayList<>();;
 
     @ManyToOne
     @JoinColumn(name = "clienteId")

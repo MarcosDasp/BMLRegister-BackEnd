@@ -22,6 +22,7 @@ public class ProcessoService {
         Processo.setData_abertura(LocalDate.now());
         return ProcessoRepository.save(Processo);
     }
+    
     public Processo editar(int id, Processo Processo) {
         // Verifique se a Processo existe
         Optional<Processo> ProcessoExistente = ProcessoRepository.findById(id);
@@ -31,7 +32,6 @@ public class ProcessoService {
             Processo ProcessoAtualizada = ProcessoExistente.get();
             ProcessoAtualizada.setStatusProcesso(Processo.getStatusProcesso());  // Atualiza os campos necessários
             ProcessoAtualizada.setFormularioId(Processo.getFormularioId());
-            ProcessoAtualizada.setFuncionarioId(Processo.getFuncionarioId());
             ProcessoAtualizada.setObservacoes(Processo.getObservacoes());
             ProcessoAtualizada.setData_validacao(Processo.getData_abertura());
             ProcessoAtualizada.setPrazo(Processo.getPrazo());

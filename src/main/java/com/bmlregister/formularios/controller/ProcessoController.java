@@ -45,7 +45,12 @@ public class ProcessoController {
 
     @PostMapping
     public ResponseEntity<Processo> incluir(@RequestBody 
-    Processo Processo) {        
+    Processo Processo) { 
+        // valida se o status existe dentro dos criados: PENDENTE, APROVADO, REPROVADO
+        if (!Processo.getStatusProcesso().equals(StatusProcesso.PENDENTE) && !Processo.getStatusProcesso().equals(StatusProcesso.APROVADO) && !Processo.getStatusProcesso().equals(StatusProcesso.REPROVADO)) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
         Processo novo = ProcessoService.incluir(Processo);
         if (novo != null) {
             return new ResponseEntity<>(novo, HttpStatus.CREATED);

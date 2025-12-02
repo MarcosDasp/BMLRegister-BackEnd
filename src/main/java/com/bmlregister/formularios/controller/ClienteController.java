@@ -61,7 +61,6 @@ public class ClienteController {
         } else {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-
     }
 
     @PutMapping("/{id}")

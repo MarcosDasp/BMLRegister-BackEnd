@@ -1,5 +1,6 @@
 package com.bmlregister.formularios.entities;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -23,8 +24,13 @@ public class Pessoa {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idPessoa;
 
+    @Column(length = 50, nullable = false)
     private String nome;
+
+    @Column(length = 15)
     private String telefone;
+
+    @Column(length = 50)
     private String email;
     
 }
