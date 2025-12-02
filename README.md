@@ -64,8 +64,7 @@ O sistema permite:
 - Spring Boot  
 - Spring Web  
 - Spring Data JPA  
-- Hibernate  
-- MySQL (ou PostgreSQL)  
+- MySQL 
 - Maven  
 
 ### **Frontend**
