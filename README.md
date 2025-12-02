@@ -1,16 +1,13 @@
 # 🌐 **BML Register – Sistema de Gerenciamento de Processos e Formulários**
 
-![Banner do Projeto](https://via.placeholder.com/1200x250.png?text=BML+Register+-+Gerenciamento+de+Processos+e+Formul%C3%A1rios)
+![Banner do Projeto](https://www.fatecriopreto.edu.br/images/banner-rodape.jpg)
 
 ---
-
-## ⭐ **Badges**
 
 ![Status](https://img.shields.io/badge/Status-Em%20Desenvolvimento-blue)
 ![Java](https://img.shields.io/badge/Java-17-orange)
 ![SpringBoot](https://img.shields.io/badge/SpringBoot-3.x-brightgreen)
 ![Frontend](https://img.shields.io/badge/Frontend-HTML%20%7C%20CSS%20%7C%20JS-yellow)
-![License](https://img.shields.io/badge/License-MIT-lightgrey)
 ![Build](https://img.shields.io/badge/Build-Passing-success)
 
 ---
@@ -67,8 +64,7 @@ O sistema permite:
 - Spring Boot  
 - Spring Web  
 - Spring Data JPA  
-- Hibernate  
-- MySQL (ou PostgreSQL)  
+- MySQL 
 - Maven  
 
 ### **Frontend**
