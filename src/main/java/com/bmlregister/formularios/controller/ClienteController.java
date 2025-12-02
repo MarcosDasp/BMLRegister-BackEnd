@@ -54,6 +54,7 @@ public class ClienteController {
     @PutMapping("/{id}")
     public ResponseEntity<Cliente> editar(@PathVariable int id, 
     @RequestBody Cliente Cliente) {
+        Cliente.setIdPessoa(id);
         Cliente atualizado = ClienteService.editar(id,Cliente);
         if (atualizado != null) {
             return new ResponseEntity<>(atualizado, HttpStatus.OK);

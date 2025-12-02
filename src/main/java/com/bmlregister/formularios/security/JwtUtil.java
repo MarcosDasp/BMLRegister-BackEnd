@@ -11,9 +11,9 @@ public class JwtUtil {
     private static final long EXPIRATION_TIME = 1000 * 60 * 60; // 1 hora
     private static final Key KEY = Keys.hmacShaKeyFor(SECRET.getBytes());
 
-    public static String gerarToken(String email, String nivelAcesso) {
+    public static String gerarToken(String login, String nivelAcesso) {
         return Jwts.builder()
-                .setSubject(email)
+                .setSubject(login)
                 .claim("role", nivelAcesso)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
@@ -28,7 +28,7 @@ public class JwtUtil {
                 .parseClaimsJws(token);
     }
 
-    public static String getEmailDoToken(String token) {
+    public static String getLoginDoToken(String token) {
         return validarToken(token).getBody().getSubject();
     }
 }

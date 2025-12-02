@@ -1,6 +1,5 @@
 package com.bmlregister.formularios.controller;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -13,12 +12,9 @@ import org.springframework.web.bind.annotation.*;
 import com.bmlregister.formularios.entities.Cliente;
 import com.bmlregister.formularios.entities.Formulario;
 import com.bmlregister.formularios.entities.Funcionario;
-import com.bmlregister.formularios.entities.Processo;
-import com.bmlregister.formularios.entities.enums.StatusProcesso;
 import com.bmlregister.formularios.repository.ClienteRepository;
 import com.bmlregister.formularios.repository.FormularioRepository;
 import com.bmlregister.formularios.repository.FuncionarioRepository;
-import com.bmlregister.formularios.repository.ProcessoRepository;
 import com.bmlregister.formularios.security.JwtUtil;
 import com.bmlregister.formularios.service.FormularioService;
 
@@ -32,9 +28,6 @@ public class FormularioController {
 
     @Autowired
     private FormularioService formularioService;
-
-    @Autowired
-    private ProcessoRepository processoRepository;
 
     @Autowired
     private ClienteRepository clienteRepository;
@@ -100,9 +93,10 @@ public class FormularioController {
     public ResponseEntity<?> submit(@PathVariable String token, @RequestBody Formulario dados,  @RequestHeader("Authorization") String authHeader) {
 
         String jwt = authHeader.replace("Bearer ", "");
-        String emailDoFuncionario = JwtUtil.getEmailDoToken(jwt);
+        String emailDoFuncionario = JwtUtil.getLoginDoToken(jwt);
 
-        Funcionario funcionario = funcionarioRepository.findByEmail(emailDoFuncionario)
+        // ele pega o valor do funcionario para criar um processo, mas tem que ver como faria isso num trigger
+        Funcionario funcionario = funcionarioRepository.findByLogin(emailDoFuncionario)
             .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 
         Optional<Formulario> opt = formularioRepository.findByToken(token);
@@ -124,16 +118,7 @@ public class FormularioController {
         f.setValor(dados.getValor());
         formularioRepository.save(f);
 
-        // Cria um processo automaticamente
-        Processo p = new Processo();
-        p.setClienteId(f.getClienteId());
-        p.setFormularioId(f);
-        p.setData_abertura(LocalDate.now());
-        p.setFuncionarioId(funcionario);
-        p.setStatusProcesso(StatusProcesso.PENDENTE);
-        p.setValor(f.getValor());
-        p.setPrazo(dados.getPrazo());
-        processoRepository.save(p);
+        // Cria um processo automaticamente (vai virar um Trigger no SQL)
 
         return ResponseEntity.ok("Formulário enviado e processo criado!");
     }

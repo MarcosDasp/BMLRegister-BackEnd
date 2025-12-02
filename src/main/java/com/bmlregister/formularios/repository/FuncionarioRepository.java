@@ -9,7 +9,6 @@ import com.bmlregister.formularios.entities.Funcionario;
 
 @Repository
 public interface FuncionarioRepository extends JpaRepository<Funcionario, Integer> {
-    Optional<Funcionario> findByEmailAndSenha(String email, String senha);
-    Optional<Funcionario> findByEmail(String email);
-
+    Optional<Funcionario> findByLoginAndSenha(String login, String senha);
+    Optional<Funcionario> findByLogin(String login);
 }

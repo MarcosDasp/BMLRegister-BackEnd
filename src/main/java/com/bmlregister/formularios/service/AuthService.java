@@ -13,7 +13,7 @@ public class AuthService {
     @Autowired
     private FuncionarioRepository funcionarioRepository;
 
-    public Optional<Funcionario> autenticar(String email, String senha) {
-        return funcionarioRepository.findByEmailAndSenha(email, senha);
+    public Optional<Funcionario> autenticar(String login, String senha) {
+        return funcionarioRepository.findByLoginAndSenha(login, senha);
     }
 }

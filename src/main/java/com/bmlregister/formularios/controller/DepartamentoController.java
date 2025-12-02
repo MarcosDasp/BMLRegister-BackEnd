@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.bmlregister.formularios.entities.Departamento;
-import com.bmlregister.formularios.service.DepartamentoService;
+import com.bmlregister.formularios.entities.Pessoa;
+import com.bmlregister.formularios.service.PessoaService;
 
 @RestController
 @RequestMapping("/api/departamentos")
@@ -24,16 +24,16 @@ import com.bmlregister.formularios.service.DepartamentoService;
 public class DepartamentoController {
 
     @Autowired
-    private DepartamentoService DepartamentoService;
+    private PessoaService DepartamentoService;
 
     @GetMapping
-    public ResponseEntity<List<Departamento>> listarTodos() {
-        List<Departamento> lista = DepartamentoService.listarTodos();
+    public ResponseEntity<List<Pessoa>> listarTodos() {
+        List<Pessoa> lista = DepartamentoService.listarTodos();
         return ResponseEntity.ok().body(lista);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Departamento> buscarPorId(@PathVariable int id) {
+    public ResponseEntity<Pessoa> buscarPorId(@PathVariable int id) {
         return DepartamentoService.buscarPorId(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
@@ -41,9 +41,9 @@ public class DepartamentoController {
 
 
     @PostMapping
-    public ResponseEntity<Departamento> incluir(@RequestBody 
-    Departamento Departamento) {
-        Departamento novo = DepartamentoService.incluir(Departamento);
+    public ResponseEntity<Pessoa> incluir(@RequestBody 
+    Pessoa Departamento) {
+        Pessoa novo = DepartamentoService.incluir(Departamento);
         if (novo != null) {
             return new ResponseEntity<>(novo, HttpStatus.CREATED);
         } else {
@@ -52,9 +52,9 @@ public class DepartamentoController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Departamento> editar(@PathVariable int id, 
-    @RequestBody Departamento Departamento) {
-        Departamento atualizado = DepartamentoService.editar(id,Departamento);
+    public ResponseEntity<Pessoa> editar(@PathVariable int id, 
+    @RequestBody Pessoa Departamento) {
+        Pessoa atualizado = DepartamentoService.editar(id,Departamento);
         if (atualizado != null) {
             return new ResponseEntity<>(atualizado, HttpStatus.OK);
         } else {

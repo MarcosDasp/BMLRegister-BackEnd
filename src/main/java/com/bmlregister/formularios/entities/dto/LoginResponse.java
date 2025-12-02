@@ -1,7 +1,6 @@
 package com.bmlregister.formularios.entities.dto;
 
 import com.bmlregister.formularios.entities.enums.NivelAcesso;
-import com.bmlregister.formularios.security.JwtUtil;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

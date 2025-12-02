@@ -46,19 +46,20 @@ public class FuncionarioController {
             try {
                 String nome = (String) body.get("nome");
                 String email = (String) body.get("email");
+                String login = (String) body.get("login");
                 String senha = (String) body.get("senha");
                 String telefone = (String) body.get("telefone");
                 String nivelAcesso = (String) body.get("nivelAcesso");
-                Integer departamentoId = (Integer) body.get("departamentoId");
 
                 Funcionario f = new Funcionario();
                 f.setNome(nome);
                 f.setEmail(email);
+                f.setLogin(login);
                 f.setSenha(senha);
                 f.setTelefone(telefone);
                 f.setNivelAcesso(NivelAcesso.valueOf(nivelAcesso));
 
-                Funcionario novo = FuncionarioService.incluir(f, departamentoId);
+                Funcionario novo = FuncionarioService.incluir(f);
                 return new ResponseEntity<>(novo, HttpStatus.CREATED);
             } catch (Exception e) {
                 System.out.println(e.getMessage());

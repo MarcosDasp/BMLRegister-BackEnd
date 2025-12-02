@@ -45,5 +45,5 @@ public class Formulario {
     private Cliente clienteId;
 
     @OneToOne(mappedBy = "formularioId", cascade = CascadeType.ALL)
-    private Processo processoCadastro;
+    private Processo processo;
 }

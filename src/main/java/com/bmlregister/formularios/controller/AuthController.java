@@ -34,7 +34,7 @@ public class AuthController {
         String token = JwtUtil.gerarToken(funcionario.getEmail(), funcionario.getNivelAcesso().name());
 
         LoginResponse response = new LoginResponse(
-                funcionario.getIdFuncionario(),
+                funcionario.getIdPessoa(),
                 funcionario.getNome(),
                 funcionario.getEmail(),
                 funcionario.getNivelAcesso(),
