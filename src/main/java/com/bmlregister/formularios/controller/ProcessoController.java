@@ -22,7 +22,7 @@ import com.bmlregister.formularios.entities.enums.StatusProcesso;
 import com.bmlregister.formularios.service.ProcessoService;
 
 @RestController
-@RequestMapping("/api/Processos")
+@RequestMapping("/api/processos")
 @CrossOrigin(origins = "*") // Permite que o frontend acesse a API
 public class ProcessoController {
 
@@ -45,7 +45,7 @@ public class ProcessoController {
 
     @PostMapping
     public ResponseEntity<Processo> incluir(@RequestBody 
-    Processo Processo) {
+    Processo Processo) {        
         Processo novo = ProcessoService.incluir(Processo);
         if (novo != null) {
             return new ResponseEntity<>(novo, HttpStatus.CREATED);

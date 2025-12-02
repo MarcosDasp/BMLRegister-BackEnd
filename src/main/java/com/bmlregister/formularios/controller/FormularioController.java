@@ -35,9 +35,7 @@ public class FormularioController {
     @Autowired
     private FuncionarioRepository funcionarioRepository;
 
-    // ============================================================
     // Obter um formulário usando o token
-    // ============================================================
     @GetMapping("/{token}")
     public ResponseEntity<?> getByToken(@PathVariable String token) {
         Optional<Formulario> formOpt = formularioRepository.findByToken(token);
@@ -50,9 +48,7 @@ public class FormularioController {
     }
 
 
-    // ============================================================
     // Criar um formulário vazio e gerar token
-    // ============================================================
     @PostMapping("/criar")
     public ResponseEntity<?> criarFormulario(@RequestBody Map<String, Integer> body) {
 
@@ -86,17 +82,15 @@ public class FormularioController {
     }
 
 
-    // ============================================================
     // Receber o submit do formulário preenchido (JS envia aqui)
-    // ============================================================
     @PostMapping("/{token}/submit")
     public ResponseEntity<?> submit(@PathVariable String token, @RequestBody Formulario dados,  @RequestHeader("Authorization") String authHeader) {
 
         String jwt = authHeader.replace("Bearer ", "");
-        String emailDoFuncionario = JwtUtil.getLoginDoToken(jwt);
+        String loginDoFuncionario = JwtUtil.getLoginDoToken(jwt);
 
         // ele pega o valor do funcionario para criar um processo, mas tem que ver como faria isso num trigger
-        Funcionario funcionario = funcionarioRepository.findByLogin(emailDoFuncionario)
+        Funcionario funcionario = funcionarioRepository.findByLogin(loginDoFuncionario)
             .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 
         Optional<Formulario> opt = formularioRepository.findByToken(token);
@@ -112,8 +106,37 @@ public class FormularioController {
 
         // Atualiza os campos enviados
         f.setNomeEmpresa(dados.getNomeEmpresa());
+
+        // valida dados antes de inserir
+
+        // pega só os numeros do cnpj
+        dados.setCnpj(dados.getCnpj().replaceAll("[^0-9]", ""));
+
+        // verifica se o cnpj tem 14 digitos
+        if (dados.getCnpj().length() != 14) {
+            return ResponseEntity.badRequest().body("CNPJ inválido.");
+        }
+
+        // formata o cnpj para o padrão brasileiro: xx.xxx.xxx/xxxx-xx
+        dados.setCnpj(dados.getCnpj().substring(0, 2) + "." + dados.getCnpj().substring(2, 5) + "." + dados.getCnpj().substring(5, 8) + "/" + dados.getCnpj().substring(8, 12) + "-" + dados.getCnpj().substring(12));
+
+        // salva o cpnj
         f.setCnpj(dados.getCnpj());
+        
+        // pega só os numeros do telefone
+        dados.setTelefone(dados.getTelefone().replaceAll("[^0-9]", ""));
+
+        // verifica se o telefone tem 11 digitos
+        if (dados.getTelefone().length() != 11) {
+            return ResponseEntity.badRequest().body("Telefone inválido.");
+        }
+
+        // formata o telefone para o padrão brasileiro: (xx) xxxxx-xxxx
+        dados.setTelefone("(" + dados.getTelefone().substring(0, 2) + ") " + dados.getTelefone().substring(2, 7) + "-" + dados.getTelefone().substring(7));
+
+        // salva o telefone
         f.setTelefone(dados.getTelefone());
+        
         f.setPrazo(dados.getPrazo());
         f.setValor(dados.getValor());
         formularioRepository.save(f);

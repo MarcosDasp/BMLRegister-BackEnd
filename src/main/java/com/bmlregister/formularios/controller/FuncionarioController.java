@@ -41,31 +41,49 @@ public class FuncionarioController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-        @PostMapping
-        public ResponseEntity<Funcionario> incluir(@RequestBody Map<String, Object> body) {
-            try {
-                String nome = (String) body.get("nome");
-                String email = (String) body.get("email");
-                String login = (String) body.get("login");
-                String senha = (String) body.get("senha");
-                String telefone = (String) body.get("telefone");
-                String nivelAcesso = (String) body.get("nivelAcesso");
+    @PostMapping
+    public ResponseEntity<Funcionario> incluir(@RequestBody Map<String, Object> body) {
+        try {
+            String nome = (String) body.get("nome");
+            String email = (String) body.get("email");
+            String login = (String) body.get("login");
+            String senha = (String) body.get("senha");
+            String telefone = (String) body.get("telefone");
+            String nivelAcesso = (String) body.get("nivelAcesso");
 
-                Funcionario f = new Funcionario();
-                f.setNome(nome);
-                f.setEmail(email);
-                f.setLogin(login);
-                f.setSenha(senha);
-                f.setTelefone(telefone);
-                f.setNivelAcesso(NivelAcesso.valueOf(nivelAcesso));
-
-                Funcionario novo = FuncionarioService.incluir(f);
-                return new ResponseEntity<>(novo, HttpStatus.CREATED);
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
+            // validacao de dados antes de inserir. Email ter @ e .
+            if (!email.contains("@") || !email.contains(".")) {
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
+            
+            // pegar só o numero do telefone
+            telefone = telefone.replaceAll("[^0-9]", "");
+            
+            // verifica se o telefone tem 11 digitos
+            if (telefone.length() != 11) {
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+
+            // formata o telefone para o padrão brasileiro: (xx) xxxxx-xxxx
+            telefone = "(" + telefone.substring(0, 2) + ") " + telefone.substring(2, 7) + "-" + telefone.substring(7);
+
+
+
+            Funcionario f = new Funcionario();
+            f.setNome(nome);
+            f.setEmail(email);
+            f.setLogin(login);
+            f.setSenha(senha);
+            f.setTelefone(telefone);
+            f.setNivelAcesso(NivelAcesso.valueOf(nivelAcesso));
+
+            Funcionario novo = FuncionarioService.incluir(f);
+            return new ResponseEntity<>(novo, HttpStatus.CREATED);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+    }
 
 
      @PutMapping("/{id}")

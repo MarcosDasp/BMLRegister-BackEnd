@@ -41,14 +41,27 @@ public class ClienteController {
 
 
     @PostMapping
-    public ResponseEntity<Cliente> incluir(@RequestBody 
-    Cliente Cliente) {
+    public ResponseEntity<Cliente> incluir(@RequestBody Cliente Cliente) {
+        // validacao de dados antes de inserir.
+        if (!Cliente.getEmail().contains("@") || !Cliente.getEmail().contains(".")) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        // pegar só o numero do telefone
+        Cliente.setTelefone(Cliente.getTelefone().replaceAll("[^0-9]", ""));
+        // verifica se o telefone tem 11 digitos
+        if (Cliente.getTelefone().length() != 11) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        // formata o telefone para o padrão brasileiro: (xx) xxxxx-xxxx
+        Cliente.setTelefone("(" + Cliente.getTelefone().substring(0, 2) + ") " + Cliente.getTelefone().substring(2, 7) + "-" + Cliente.getTelefone().substring(7));
+
         Cliente novo = ClienteService.incluir(Cliente);
         if (novo != null) {
             return new ResponseEntity<>(novo, HttpStatus.CREATED);
         } else {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+
     }
 
     @PutMapping("/{id}")

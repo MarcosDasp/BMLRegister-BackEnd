@@ -22,16 +22,16 @@ public class AuthController {
     private AuthService authService;
 
     @PostMapping("/login")
-   public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
        Optional<Funcionario> funcionarioOpt = authService.autenticar(
-            loginRequest.getEmail(),
+            loginRequest.getLogin(),
             loginRequest.getSenha()
     );
 
     if (funcionarioOpt.isPresent()) {
         Funcionario funcionario = funcionarioOpt.get();
         
-        String token = JwtUtil.gerarToken(funcionario.getEmail(), funcionario.getNivelAcesso().name());
+        String token = JwtUtil.gerarToken(funcionario.getLogin(), funcionario.getNivelAcesso().name());
 
         LoginResponse response = new LoginResponse(
                 funcionario.getIdPessoa(),
