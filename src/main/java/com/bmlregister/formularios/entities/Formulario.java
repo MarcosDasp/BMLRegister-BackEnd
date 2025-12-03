@@ -13,14 +13,10 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Entity
-@Setter
 @Builder
-@Getter
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -29,15 +25,15 @@ public class Formulario {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int idFormulario;
+    private int id;
 
-    @Column(length = 50, nullable = false)
+    @Column(length = 50)
     private String nomeEmpresa;
 
-    @Column(length = 18, nullable = false)
+    @Column(length = 18)
     private String cnpj;
 
-    @Column(length = 15, nullable = false)
+    @Column(length = 15)
     private String telefone;
 
     @Column(nullable = false)
@@ -50,9 +46,9 @@ public class Formulario {
     private String token; // token único para gerar o link
 
     @ManyToOne
-    @JoinColumn(name = "clienteId", nullable = false)
-    private Cliente clienteId;
+    @JoinColumn(name = "cliente_id", nullable = false)
+    private Cliente cliente;
 
-    @OneToOne(mappedBy = "formularioId", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "formulario", cascade = CascadeType.ALL)
     private Processo processo;
 }

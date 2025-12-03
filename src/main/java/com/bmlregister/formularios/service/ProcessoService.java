@@ -31,7 +31,7 @@ public class ProcessoService {
             // Atualiza a Processo
             Processo ProcessoAtualizada = ProcessoExistente.get();
             ProcessoAtualizada.setStatusProcesso(Processo.getStatusProcesso());  // Atualiza os campos necessários
-            ProcessoAtualizada.setFormularioId(Processo.getFormularioId());
+            ProcessoAtualizada.setFormulario(Processo.getFormulario());
             ProcessoAtualizada.setObservacoes(Processo.getObservacoes());
             ProcessoAtualizada.setData_validacao(Processo.getData_abertura());
             ProcessoAtualizada.setPrazo(Processo.getPrazo());

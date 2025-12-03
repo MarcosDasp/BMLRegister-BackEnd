@@ -15,8 +15,6 @@ public class FuncionarioService {
     @Autowired
     private FuncionarioRepository FuncionarioRepository;
 
-    @Autowired
-
     public Funcionario incluir(Funcionario Funcionario) {
         
         return FuncionarioRepository.save(Funcionario);
@@ -29,7 +27,7 @@ public class FuncionarioService {
         if (FuncionarioExistente.isPresent()) {
             // Atualiza a Funcionario
             Funcionario FuncionarioAtualizada = FuncionarioExistente.get();
-            FuncionarioAtualizada.setLogin(Funcionario.getEmail());  // Atualiza os campos necessários
+            FuncionarioAtualizada.setLogin(Funcionario.getLogin());  // Atualiza os campos necessários
             FuncionarioAtualizada.setNome(Funcionario.getNome());
             FuncionarioAtualizada.setTelefone(Funcionario.getTelefone());
             FuncionarioAtualizada.setNivelAcesso(Funcionario.getNivelAcesso());

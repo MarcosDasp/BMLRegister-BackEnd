@@ -26,11 +26,11 @@ public class ProcessoFuncionario {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "processo_id")
+    @JoinColumn(name = "idProcesso")
     private Processo processo;
 
     @ManyToOne
-    @JoinColumn(name = "funcionario_id")
+    @JoinColumn(name = "idPessoa")
     private Funcionario funcionario;
 
     @Column(nullable = false)

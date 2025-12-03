@@ -45,7 +45,7 @@ public class AuthController {
 
         return ResponseEntity.ok(response);
     } else {
-        return ResponseEntity.status(401).body("E-mail ou senha incorretos.");
+        return ResponseEntity.status(401).body("Login ou senha incorretos.");
     }
     }
 }

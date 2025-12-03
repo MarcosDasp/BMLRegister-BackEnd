@@ -14,8 +14,9 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.Data;
@@ -47,15 +48,20 @@ public class Processo {
 
     private int prazo;
     
-    @OneToMany(mappedBy = "processo")
-    private List<Funcionario> historicoFuncionarios =  new ArrayList<>();;
+    @ManyToMany
+    @JoinTable(
+        name = "processo_funcionario",
+        joinColumns = @JoinColumn(name = "idProcesso"),
+        inverseJoinColumns = @JoinColumn(name = "idPessoa")
+    )
+    private List<Funcionario> historicoFuncionarios = new ArrayList<>();
 
     @ManyToOne
-    @JoinColumn(name = "clienteId")
-    private Cliente clienteId;
+    @JoinColumn(name = "cliente_id")
+    private Cliente cliente;
 
     @OneToOne
-    @JoinColumn(name = "formularioId")
+    @JoinColumn(name = "formulario_id")
     @JsonIgnore
-    private Formulario formularioId;  
+    private Formulario formulario;  
 }

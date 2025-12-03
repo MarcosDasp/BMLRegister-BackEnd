@@ -13,6 +13,7 @@ import com.bmlregister.formularios.entities.Cliente;
 import com.bmlregister.formularios.entities.Formulario;
 import com.bmlregister.formularios.entities.Funcionario;
 import com.bmlregister.formularios.entities.Processo;
+import com.bmlregister.formularios.entities.ProcessoFuncionario;
 import com.bmlregister.formularios.entities.enums.StatusProcesso;
 import com.bmlregister.formularios.repository.ClienteRepository;
 import com.bmlregister.formularios.repository.FormularioRepository;
@@ -85,16 +86,14 @@ public class FormularioController {
         String token = UUID.randomUUID().toString();
 
         Formulario f = new Formulario();
-        f.setClienteId(cliente);
+        f.setCliente(cliente);
         f.setToken(token);
         formularioRepository.save(f);
 
         Processo p = new Processo();
-        p.setClienteId(f.getClienteId());
+        p.setCliente(f.getCliente());
         p.setStatusProcesso(StatusProcesso.ENVIADO);
-        p.setFormularioId(f);
-        p.getHistoricoFuncionarios().add(funcionario);
-        // salvar o funcionario, com a variavel tipo = CRIADOR
+        p.setFormulario(f);
 
         processoRepository.save(p);
 
@@ -124,7 +123,7 @@ public class FormularioController {
 
         Formulario f = opt.get();
 
-        if (f.getClienteId() == null) {
+        if (f.getCliente() == null) {
             return ResponseEntity.status(500).body("Erro: formulário não possui cliente associado.");
         }
 
@@ -176,7 +175,7 @@ public class FormularioController {
         processoRepository.save(processo);
 
         // atualiza o cliente para conter o processo
-        Cliente cliente = f.getClienteId();
+        Cliente cliente = f.getCliente();
         cliente.getProcessos().add(processo);
         clienteService.editar(cliente.getIdPessoa(), cliente);
 

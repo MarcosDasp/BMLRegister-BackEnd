@@ -17,7 +17,7 @@ import lombok.Setter;
 @Setter
 @Getter
 @Entity
-@PrimaryKeyJoinColumn(name = "idFuncionario")
+@PrimaryKeyJoinColumn(name = "idPessoa")
 @Table(name = "funcionarios")
 public class Funcionario extends Pessoa {
 
@@ -31,6 +31,6 @@ public class Funcionario extends Pessoa {
     @Column(nullable = false)
     private NivelAcesso nivelAcesso;
 
-    @ManyToMany(mappedBy = "funcionarios")
+    @ManyToMany(mappedBy = "historicoFuncionarios") // 'historicoFuncionarios' é o nome do campo em Processo
     private List<Processo> processos;
 }

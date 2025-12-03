@@ -17,13 +17,13 @@ import lombok.Setter;
 @Setter
 @Getter
 @Table(name = "clientes")
-@PrimaryKeyJoinColumn(name = "idCliente")
+@PrimaryKeyJoinColumn(name = "idPessoa")
 public class Cliente extends Pessoa {
 
-    @OneToMany(mappedBy = "clienteId", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private List<Processo> processos = new ArrayList<>();;
 
-    @OneToMany(mappedBy = "clienteId", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Formulario> formularios = new ArrayList<>();
 }
