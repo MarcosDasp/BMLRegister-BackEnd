@@ -3,6 +3,7 @@ package com.bmlregister.formularios.entities;
 import java.time.LocalDateTime;
 
 import com.bmlregister.formularios.entities.enums.Tipo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -23,14 +24,16 @@ public class ProcessoFuncionario {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private int id;
 
     @ManyToOne
     @JoinColumn(name = "idProcesso")
+    @JsonIgnore
     private Processo processo;
 
     @ManyToOne
     @JoinColumn(name = "idPessoa")
+    @JsonIgnore
     private Funcionario funcionario;
 
     @Column(nullable = false)

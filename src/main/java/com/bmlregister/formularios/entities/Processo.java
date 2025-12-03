@@ -54,10 +54,12 @@ public class Processo {
         joinColumns = @JoinColumn(name = "idProcesso"),
         inverseJoinColumns = @JoinColumn(name = "idPessoa")
     )
+    @JsonIgnore
     private List<Funcionario> historicoFuncionarios = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "cliente_id")
+    @JsonIgnore
     private Cliente cliente;
 
     @OneToOne

@@ -18,6 +18,7 @@ import com.bmlregister.formularios.entities.enums.StatusProcesso;
 import com.bmlregister.formularios.repository.ClienteRepository;
 import com.bmlregister.formularios.repository.FormularioRepository;
 import com.bmlregister.formularios.repository.FuncionarioRepository;
+import com.bmlregister.formularios.repository.ProcessoFuncionarioRepositorty;
 import com.bmlregister.formularios.repository.ProcessoRepository;
 import com.bmlregister.formularios.security.JwtUtil;
 import com.bmlregister.formularios.service.ClienteService;
@@ -45,6 +46,10 @@ public class FormularioController {
 
     @Autowired
     private ProcessoRepository processoRepository;
+
+    @Autowired
+    private ProcessoFuncionarioRepositorty processoFuncionarioRepositorty;
+
 
     // Obter um formulário usando o token
     @GetMapping("/{token}")
@@ -96,6 +101,12 @@ public class FormularioController {
         p.setFormulario(f);
 
         processoRepository.save(p);
+
+        ProcessoFuncionario pf = new ProcessoFuncionario();
+        pf.setFuncionario(funcionario);
+        pf.setProcesso(p);
+        processoFuncionarioRepositorty.save(pf);
+        
 
         // atualiza o cliente para conter o formulario relacionado
         cliente.getFormularios().add(f);

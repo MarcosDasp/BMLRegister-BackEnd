@@ -25,5 +25,6 @@ public class Cliente extends Pessoa {
     private List<Processo> processos = new ArrayList<>();;
 
     @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     private List<Formulario> formularios = new ArrayList<>();
 }
