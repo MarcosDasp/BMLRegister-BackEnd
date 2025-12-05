@@ -138,6 +138,10 @@ public class FormularioController {
             return ResponseEntity.status(500).body("Erro: formulário não possui cliente associado.");
         }
 
+        if (f.getCnpj() != null) {
+             return ResponseEntity.status(500).body("Erro: formulário já preenchido.");
+        }
+
         // Atualiza os campos enviados
         f.setNomeEmpresa(dados.getNomeEmpresa());
 
@@ -172,7 +176,14 @@ public class FormularioController {
         f.setTelefone(dados.getTelefone());
         
         f.setPrazo(dados.getPrazo());
+
+        if (dados.getValor() <= 0) {
+            return ResponseEntity.status(500).body("Erro: o valor não pode ser negativo ou zero.");
+        }
+
         f.setValor(dados.getValor());
+
+
         formularioRepository.save(f);
 
         // Atualiza o processo com as informações do formulário

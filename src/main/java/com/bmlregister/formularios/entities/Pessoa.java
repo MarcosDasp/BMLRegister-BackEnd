@@ -27,10 +27,10 @@ public class Pessoa {
     @Column(length = 50, nullable = false)
     private String nome;
 
-    @Column(length = 15)
+    @Column(length = 15, unique = true)
     private String telefone;
 
-    @Column(length = 50)
+    @Column(length = 50, unique = true)
     private String email;
     
 }
