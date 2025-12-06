@@ -8,20 +8,20 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.bmlregister.formularios.entities.dto.FormularioPendenteDTO;
-import com.bmlregister.formularios.service.views.FormulariosPendentesService;
+import com.bmlregister.formularios.entities.dto.ProcessosDTO;
+import com.bmlregister.formularios.service.views.ViewProcessosService;
 
 @RestController
 @RequestMapping("/api/views")
 @CrossOrigin(origins = "*") // Permite que o frontend acesse a API
-public class FormulariosPendentesController {
+public class ViewProcessosController {
 
     @Autowired
-    private FormulariosPendentesService service;
+    private ViewProcessosService service;
 
-    @GetMapping("/pendentes")
-    public List<FormularioPendenteDTO> listar() {
-        return service.listarPendentes();
+    @GetMapping("/processos")
+    public List<ProcessosDTO> listar() {
+        return service.listar();
     }
 }
 

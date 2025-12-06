@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bmlregister.formularios.entities.Processo;
@@ -79,7 +78,7 @@ public class ProcessoController {
     @PatchMapping("/{id}/status")
     public ResponseEntity<Processo> atualizarStatus(
             @PathVariable int id,
-            @RequestParam StatusProcesso status) {
+            @RequestBody StatusProcesso status) {
         try {
             Processo atualizado = ProcessoService.atualizarStatus(id, status);
             return ResponseEntity.ok(atualizado);

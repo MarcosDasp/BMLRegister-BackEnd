@@ -5,5 +5,6 @@ public record FormularioPendenteDTO(
     String email,
     String telefone,
     String statusProcesso,
-    String token
+    String token,
+    Integer id
 ) {}
