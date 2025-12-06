@@ -1,0 +1,13 @@
+package com.bmlregister.formularios.repository.functions;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.bmlregister.formularios.entities.Processo;
+
+@Respository
+public interface ProcessoRepository extends JpaRepository<Processo, Integer> {
+
+    @Query(value = "SELECT dbo.fc_calcTotalProcessos(:periodo)", nativeQuery = true)
+    BigDecimal calcularTotalProcessos(@Param("periodo") LocalDate periodo);\
+
+}

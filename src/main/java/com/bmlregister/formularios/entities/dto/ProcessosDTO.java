@@ -1,6 +1,6 @@
 package com.bmlregister.formularios.entities.dto;
 
-import java.time.LocalDate;
+import java.sql.Date;
 
 public record ProcessosDTO(
     String nome,
@@ -11,8 +11,8 @@ public record ProcessosDTO(
     String telefone_empresa,
     float valor,
     String statusProcesso,
-    LocalDate data_abertura,
-    LocalDate data_validacao,
+    Date data_abertura,
+    Date data_validacao,
     String observacao,
     int prazo,
     int id_form

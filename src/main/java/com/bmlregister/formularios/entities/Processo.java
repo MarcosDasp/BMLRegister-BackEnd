@@ -22,7 +22,8 @@ import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
-import java.time.LocalDate;
+
+import java.sql.Date;
 
 @Entity
 @Setter
@@ -35,9 +36,9 @@ public class Processo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idProcesso;
 
-    private LocalDate data_abertura;
+    private Date data_abertura;
 
-    private LocalDate data_validacao;
+    private Date data_validacao;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status_processo", nullable = false)

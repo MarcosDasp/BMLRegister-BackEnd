@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.bmlregister.formularios.entities.dto.AtualizarProcessoDTO;
 import com.bmlregister.formularios.service.procedures.AtualizarProcessoService;
 
 @RestController
@@ -18,8 +19,16 @@ public class AtualizarProcessoController {
     private AtualizarProcessoService service;
 
     @PostMapping("/atualizar")
-    public void atualizarProcesso(@RequestBody String nomeEmpresa, String telefoneEmpresa, String cnpj, Float valor, String observacao, Integer prazo, Integer id) {
-        service.atualizarProcesso(nomeEmpresa, telefoneEmpresa, cnpj, valor, observacao, prazo, id);
+    public void atualizarProcesso(@RequestBody AtualizarProcessoDTO dto) {
+            service.atualizarProcesso(
+        dto.nomeEmpresa,
+        dto.telefoneEmpresa,
+        dto.cnpj,
+        dto.valor,
+        dto.observacao,
+        dto.prazo,
+        dto.id
+        );
     }
 }
 

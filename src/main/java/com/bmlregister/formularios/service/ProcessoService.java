@@ -1,6 +1,5 @@
 package com.bmlregister.formularios.service;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,7 +18,6 @@ public class ProcessoService {
 
     public Processo incluir(Processo Processo) {
         Processo.setStatusProcesso(StatusProcesso.PENDENTE);
-        Processo.setData_abertura(LocalDate.now());
         return ProcessoRepository.save(Processo);
     }
     
