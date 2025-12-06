@@ -1,10 +1,12 @@
 package com.bmlregister.formularios.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import com.zaxxer.hikari.HikariDataSource;
+
 import java.io.File;
-import java.io.FileWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.Statement;
@@ -24,6 +26,9 @@ public class BackupService {
     private String password;
 
     private final String dbName = "bmlregister";
+
+    @Autowired
+    private HikariDataSource dataSource;
 
     public String criarBackup() throws Exception {
 
@@ -49,24 +54,32 @@ public class BackupService {
         return arquivo;
     }
 
-    public void restaurarBackup(String filePath) throws Exception {
+public void restaurarBackup(String filePath) throws Exception {
 
-        // Criar arquivo restore.bat
-        String batPath = new File("backups/restore.bat").getAbsolutePath();
+        // 2 — Trocar DB para master
+        String masterUrl = dbUrl
+                .replace("databaseName=" + dbName, "databaseName=master");
 
-        try (FileWriter fw = new FileWriter(batPath)) {
+        // 3 — Escapar corretamente as barras para SQL Server
+        String pathSql = filePath
+                .replace("\n", "")
+                .replace("\r", "")
+                .replace("\t", "")
+                .trim()
+                .replace("\\", "\\\\");
 
-            fw.write(
-                "@echo off\n" +
-                "sqlcmd -S localhost\\SQLEXPRESS -U " + user + " -P " + password + " -Q \"ALTER DATABASE " + dbName + " SET SINGLE_USER WITH ROLLBACK IMMEDIATE\"\n" +
-                "sqlcmd -S localhost\\SQLEXPRESS -U " + user + " -P " + password + " -Q \"RESTORE DATABASE " + dbName + " FROM DISK='" + filePath + "' WITH REPLACE\"\n" +
-                "sqlcmd -S localhost\\SQLEXPRESS -U " + user + " -P " + password + " -Q \"ALTER DATABASE " + dbName + " SET MULTI_USER\"\n"
-            );
+        System.out.println("[RESTORE] Caminho convertido: " + pathSql);
+
+        try (Connection conn = DriverManager.getConnection(masterUrl, user, password);
+             Statement stmt = conn.createStatement()) {
+
+            stmt.execute("ALTER DATABASE " + dbName + " SET SINGLE_USER WITH ROLLBACK IMMEDIATE");
+            stmt.execute("RESTORE DATABASE " + dbName + " FROM DISK = N'" + pathSql + "' WITH REPLACE");
+            stmt.execute("ALTER DATABASE " + dbName + " SET MULTI_USER");
         }
 
-        // Executar o .bat
-        ProcessBuilder pb = new ProcessBuilder("cmd.exe", "/c", batPath);
-        pb.redirectErrorStream(true);
-        pb.start();
+        // 4 — Recria o pool
+        dataSource.getHikariConfigMXBean().setMinimumIdle(1);
+        dataSource.getHikariConfigMXBean().setMaximumPoolSize(10);
     }
 }

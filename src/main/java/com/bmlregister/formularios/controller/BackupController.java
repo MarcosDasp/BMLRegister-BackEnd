@@ -27,22 +27,31 @@ public class BackupController {
         }
     }
 
-    @PostMapping("/restaurar")
+ @PostMapping("/restaurar")
     public ResponseEntity<String> restaurarBackup(@RequestBody Map<String, String> req) {
 
         try {
+            if (req == null || !req.containsKey("arquivo")) {
+                return ResponseEntity.badRequest().body("O JSON deve conter o campo 'arquivo'.");
+            }
+
             String arquivo = req.get("arquivo");
 
-            if (arquivo == null || arquivo.isEmpty()) {
-                return ResponseEntity.badRequest().body("Informe o arquivo .bak");
+            if (arquivo == null || arquivo.trim().isEmpty()) {
+                return ResponseEntity.badRequest()
+                        .body("O campo 'arquivo' está vazio. Envie o caminho completo do .bak");
             }
+
+            System.out.println("[RESTORE] Caminho recebido: " + arquivo);
 
             backupService.restaurarBackup(arquivo);
 
-            return ResponseEntity.ok("Processo de restauração iniciado!");
+            return ResponseEntity.ok("Restauração concluída com sucesso!");
 
         } catch (Exception e) {
+            e.printStackTrace();
             return ResponseEntity.status(500).body("Erro ao restaurar: " + e.getMessage());
         }
     }
+
 }
